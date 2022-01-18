@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import alert from '../../assets/images/icon-bell.png';
-import magnify from '../../assets/images/icon-magnifyGlass.png';
-import unnamed from '../../assets/images/unnamed.png';
+import alert from '../../assets/topNavImages/icon-bell.png';
+import magnify from '../../assets/topNavImages/icon-magnifyGlass.png';
+import unnamed from '../../assets/topNavImages/unnamed.png';
 
 function UserInformation() {
   return (

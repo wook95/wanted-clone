@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import hamburger from '../../assets/images/icon-menu.png';
-import logo from '../../assets/images/logo-font.png';
+import hamburger from '../../assets/topNavImages/icon-menu.png';
+import logo from '../../assets/topNavImages/logo-font.png';
 
 function MainLogo() {
   return (
