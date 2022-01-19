@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { debounce } from 'lodash';
 import carouselData from './carouselData';
 
 function Carousel() {
-  const [currentSlide, setCurrentSlide] = useState(1);
+  const [currentSlide, setCurrentSlide] = useState(
+    Math.floor(Math.random() * 9) - 4,
+  );
   const [windowSize, setWindowSize] = useState(window.innerWidth);
   const [isAnimated, setIsAnimated] = useState(true);
+  const [isMouseMover, setIsMouseOver] = useState(false);
+  const DELAY = 4000;
 
   let frontArr = [...carouselData].slice(
     Math.round(carouselData.length / 2) - 1,
@@ -27,15 +31,32 @@ function Carousel() {
   //   setWindowSize(window.innerWidth);
   // }, 100);
 
-  // const shiftRight = () => {
-  //   setTimeout(,1000)
+  const slideRight = useCallback(() => {
+    if (!isAnimated) return;
+    const nextSlide = currentSlide + 1;
+    setCurrentSlide(nextSlide);
 
-  //    transition: 1000ms;
-  //  transform: translate3d(1060px,0,0);
+    if (nextSlide === Math.round(carouselData.length / 2)) {
+      setTimeout(() => {
+        setIsAnimated(false);
+        setCurrentSlide(-Math.round(carouselData.length / 2) + 1);
+      }, 1000);
+    }
+  }, [currentSlide, isAnimated]);
 
   useEffect(() => {
-    setCurrentSlide(Math.floor(Math.random() * 9));
-  }, []);
+    const interval = setInterval(slideRight, DELAY);
+    if (isMouseMover) return clearInterval(interval);
+    return () => clearInterval(interval);
+  }, [slideRight, isMouseMover]);
+
+  useEffect(() => {
+    if (isAnimated) return;
+    const timeId = setTimeout(() => {
+      setIsAnimated(true);
+    }, 50);
+    return () => clearTimeout(timeId);
+  }, [isAnimated]);
 
   useEffect(() => {
     window.addEventListener('resize', resizeWindow);
@@ -48,9 +69,15 @@ function Carousel() {
     <Container>
       <Box>
         <List
+          onMouseOver={() => {
+            setIsMouseOver(true);
+          }}
+          onMouseOut={() => {
+            setIsMouseOver(false);
+          }}
           style={{
-            transition: '1000ms',
-            transform: 'translateX(-1060px)',
+            transition: `${isAnimated ? '700ms' : 'none'}`,
+            transform: `translateX(${-1060 * currentSlide}px)`,
             width: `${newCarouselData.length * 1060}px`,
           }}>
           {newCarouselData.map(item => {
@@ -63,7 +90,7 @@ function Carousel() {
                 <InformCard>
                   <CardTitle>{item.title}</CardTitle>
                   <CardDescription>{item.desc}</CardDescription>
-                  <CardLink>바로가기 > </CardLink>
+                  <CardLink>바로가기 &gt; </CardLink>
                 </InformCard>
               </Content>
             );
@@ -97,6 +124,7 @@ const List = styled.div`
 `;
 const Content = styled.div`
   width: 1060px;
+  height: 300px;
   padding: 0 12px;
   @media screen and (max-width: 1060px) {
     width: ${({ width }) => width - 110}px;
@@ -144,7 +172,7 @@ const CardDescription = styled.h3`
 
 const LeftButton = styled.button`
   position: absolute;
-  top: 145px;
+  top: 140px;
   left: calc((100% - 1180px) / 2);
   display: flex;
   align-items: center;
