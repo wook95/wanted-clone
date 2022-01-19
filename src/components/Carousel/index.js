@@ -37,7 +37,7 @@ function Carousel() {
       setTimeout(() => {
         setIsAnimated(false);
         setCurrentSlide(-Math.round(carouselData.length / 2) + 1);
-      }, 100);
+      }, 300);
     }
   }, [currentSlide, isAnimated]);
 
@@ -50,7 +50,7 @@ function Carousel() {
       setTimeout(() => {
         setIsAnimated(false);
         setCurrentSlide(Math.round(carouselData.length / 2) - 1);
-      }, 100);
+      }, 300);
     }
   }, [currentSlide, isAnimated]);
 
@@ -86,7 +86,7 @@ function Carousel() {
             setIsMouseOver(false);
           }}
           style={{
-            transition: `ease ${isAnimated ? '300ms' : 'none'}`,
+            transition: ` ease-in-out ${isAnimated ? '350ms' : 'none'}`,
             transform: `translateX(${
               -(1060 < windowSize ? 1060 : windowSize * 0.75) * currentSlide
             }px)`,
@@ -101,8 +101,18 @@ function Carousel() {
                 <img
                   src={require(`../../assets/carouselImages/${item.imageUrl}.jpg`)}
                   alt='carousel'
+                  style={{
+                    filter: `${
+                      item.id - 4 === currentSlide
+                        ? 'brightness(100%)'
+                        : 'brightness(40%)'
+                    }`,
+                  }}
                 />
-                <InformCard>
+                <InformCard
+                  style={{
+                    opacity: `${item.id - 4 === currentSlide ? 1 : 0}`,
+                  }}>
                   <CardTitle>{item.title}</CardTitle>
                   <CardDescription>{item.desc}</CardDescription>
                   <CardLink>바로가기 &gt; </CardLink>
@@ -158,10 +168,11 @@ const InformCard = styled.div`
   left: 20px;
   width: 330px;
   height: 140px;
-  background: #fff;
   border-radius: 4px;
+  background: #fff;
+  transition: 800ms;
   @media screen and (max-width: 1060px) {
-    opacity: 0;
+    display: none;
   }
 `;
 
@@ -184,10 +195,10 @@ const CardLink = styled.a`
 const CardDescription = styled.h3`
   padding: 0 20px;
   height: 44px;
+  border-bottom: 1px solid #ddd;
+  color: #333;
   font-size: 14px;
   line-height: 1.64;
-  color: #333;
-  border-bottom: 1px solid #ddd;
 `;
 
 const LeftButton = styled.button`
@@ -199,10 +210,10 @@ const LeftButton = styled.button`
   justify-content: center;
   width: 30px;
   height: 60px;
-  opacity: 0.5;
   border: 0;
   border-radius: 15px;
   background-color: #fff;
+  opacity: 0.5;
 `;
 
 const RightButton = styled(LeftButton)`
