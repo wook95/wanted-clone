@@ -27,20 +27,30 @@ function Carousel() {
   const resizeWindow = () => {
     setWindowSize(window.innerWidth);
   };
-  // const resizeWindow = debounce(() => {
-  //   setWindowSize(window.innerWidth);
-  // }, 100);
 
   const slideRight = useCallback(() => {
     if (!isAnimated) return;
     const nextSlide = currentSlide + 1;
     setCurrentSlide(nextSlide);
 
-    if (nextSlide === Math.round(carouselData.length / 2)) {
+    if (nextSlide >= Math.round(carouselData.length / 2)) {
       setTimeout(() => {
         setIsAnimated(false);
         setCurrentSlide(-Math.round(carouselData.length / 2) + 1);
-      }, 1000);
+      }, 100);
+    }
+  }, [currentSlide, isAnimated]);
+
+  const slideLeft = useCallback(() => {
+    if (!isAnimated) return;
+    const nextSlide = currentSlide - 1;
+    setCurrentSlide(nextSlide);
+
+    if (nextSlide <= Math.round(-carouselData.length / 2) - 1) {
+      setTimeout(() => {
+        setIsAnimated(false);
+        setCurrentSlide(Math.round(carouselData.length / 2) - 1);
+      }, 100);
     }
   }, [currentSlide, isAnimated]);
 
@@ -76,9 +86,14 @@ function Carousel() {
             setIsMouseOver(false);
           }}
           style={{
-            transition: `${isAnimated ? '700ms' : 'none'}`,
-            transform: `translateX(${-1060 * currentSlide}px)`,
-            width: `${newCarouselData.length * 1060}px`,
+            transition: `ease ${isAnimated ? '300ms' : 'none'}`,
+            transform: `translateX(${
+              -(1060 < windowSize ? 1060 : windowSize * 0.75) * currentSlide
+            }px)`,
+            width: `${
+              newCarouselData.length *
+              (1060 < windowSize ? 1060 : windowSize * 0.75)
+            }px`,
           }}>
           {newCarouselData.map(item => {
             return (
@@ -97,10 +112,10 @@ function Carousel() {
           })}
         </List>
       </Box>
-      <LeftButton>
+      <LeftButton onClick={debounce(slideLeft, 200)}>
         <LeftArrowImage />
       </LeftButton>
-      <RightButton>
+      <RightButton onClick={debounce(slideRight, 200)}>
         <RightArrowImage />
       </RightButton>
     </Container>
@@ -119,18 +134,21 @@ const Box = styled.div`
   margin: 0 auto;
   overflow: hidden;
 `;
+
 const List = styled.div`
   display: flex;
 `;
+
 const Content = styled.div`
   width: 1060px;
   height: 300px;
   padding: 0 12px;
-  @media screen and (max-width: 1060px) {
-    width: ${({ width }) => width - 110}px;
-  }
+
   img {
     border-radius: 4px;
+  }
+  @media screen and (max-width: 1060px) {
+    width: ${({ width }) => width - 110}px;
   }
 `;
 
@@ -142,7 +160,9 @@ const InformCard = styled.div`
   height: 140px;
   background: #fff;
   border-radius: 4px;
-  /* opacity: 0; */
+  @media screen and (max-width: 1060px) {
+    opacity: 0;
+  }
 `;
 
 const CardTitle = styled.h2`
