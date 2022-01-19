@@ -6,13 +6,19 @@ import UserInformation from './UserInformation';
 
 function TopNav() {
   return (
-    <Inner>
-      <MainLogo />
-      <LinkList />
-      <UserInformation />
-    </Inner>
+    <Container>
+      <Inner>
+        <MainLogo />
+        <LinkList />
+        <UserInformation />
+      </Inner>
+    </Container>
   );
 }
+const Container = styled.div`
+  width: 100%;
+  box-shadow: 0 1px 0 0 rgb(0 0 0 / 10%);
+`;
 
 const Inner = styled.nav`
   position: relative;

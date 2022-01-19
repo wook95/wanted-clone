@@ -58,9 +58,9 @@ const MagnifyGlass = styled.img.attrs(() => ({
 `;
 
 const UserButton = styled.button`
-  margin: 0 10px;
   width: 30px;
   height: 30px;
+  margin: 0 10px;
   border: 1px solid #ddd;
   border-radius: 100%;
 `;
@@ -80,17 +80,15 @@ const Separator = styled.span`
 `;
 
 const RoundButton = styled.button`
-  /* display: block; */
   height: 30px;
   padding: 0 10px;
-  border: 1px solid #ccc;
-  background-color: ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.gray_1};
   border: 1px solid #e1e2e3;
   border-radius: 15px;
+  color: ${({ theme }) => theme.colors.gray_1};
   font-size: 13px;
   font-weight: 400;
   line-height: 30px;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 
 export default UserInformation;
